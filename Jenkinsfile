@@ -10,7 +10,7 @@ pipeline{
             post{
                 always{
                     echo "========always========"
-                    cleanup
+                    cleanWs()
                 }
             }
         }
