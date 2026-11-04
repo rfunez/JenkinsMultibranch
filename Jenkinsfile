@@ -5,7 +5,7 @@ pipeline{
     stages{
         stage("Build"){
             steps{
-                echo "========executing Build========"
+                echo "========executing Build in lab========"
             }
             post{
                 always{
@@ -16,7 +16,7 @@ pipeline{
         }
         stage("Test"){
             steps{
-                echo "Running test"
+                echo "Running test in lab"
             }
         }
     }
