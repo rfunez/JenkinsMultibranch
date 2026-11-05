@@ -1,6 +1,9 @@
 pipeline{
     agent{
-        label "agent1"
+        label "docker-agent"
+        dockerfile {
+            filename 'Dockerfile'
+        }
     }
     options {
         timestamps()
@@ -56,6 +59,22 @@ pipeline{
                 }
             }
         }
+        stage('Build image') {
+            when {
+                branch 'feature/docker'
+            }
+            environment {
+                IMAGE_NAME = "alpine-debian"
+            }
+            steps {
+                sh '''
+                  echo "Building image"
+                  docker build -t "${env.IMAGE_NAME}":1.0.0 .
+                  docker image ls
+                '''
+            }
+        }
+
         stage('Deploy') {
             when {
                 branch 'main'
