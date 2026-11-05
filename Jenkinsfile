@@ -19,7 +19,7 @@ pipeline{
             steps {
                 withCredentials([string(credentialsId: 'my-secret', variable: 'MY_TOKEN')]) {
                     sh '''
-                       TOKEN=$(base64 -d $MY_TOKEN)
+                       TOKEN=$(echo $MY_TOKEN | base64)
                        echo "Secret decrypted: $TOKEN"
                     '''
                 }
