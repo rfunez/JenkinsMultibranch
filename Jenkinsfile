@@ -69,7 +69,7 @@ pipeline{
             steps {
                 sh '''
                   echo "Building image"
-                  docker build -t "${env.IMAGE_NAME}":1.0.0 .
+                  docker build -t "$IMAGE_NAME":1.0.0 .
                   docker image ls
                 '''
             }
