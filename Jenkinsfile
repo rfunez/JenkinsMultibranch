@@ -15,6 +15,13 @@ pipeline{
                 echo "Checking cache usage in ${env.BRANCH}"
             }
         }
+        stage('Check credentials') {
+            steps {
+                withCredentials([string(credentialsId: 'my-secret', variable: 'MY_TOKEN')]) {
+                    echo "${MY_TOKEN}"
+                }
+            }
+        }
         stage("Build"){
             steps {
                 sh '''
