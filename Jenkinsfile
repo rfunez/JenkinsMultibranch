@@ -2,21 +2,56 @@ pipeline{
     agent{
         label "agent1"
     }
+    options {
+        timestamps()
+        parallelsAlwaysFailFast()
+    }
+    environment {
+        BRANCH = "${BRANCH_NAME}"
+    }
     stages{
-        stage("Build"){
-            steps{
-                echo "========executing Build========"
+        stage('Check cache') {
+            steps {
+                echo "Checking cache usage in ${env.BRANCH}"
             }
-            post{
-                always{
-                    echo "========always========"
-                    cleanWs()
-                }
+        }
+        stage("Build"){
+            steps {
+                sh '''
+                   echo "Building app"
+                   echo "mvn clean install -P $BRANCH"
+                '''
             }
         }
         stage("Test"){
-            steps{
-                echo "Running test"
+            parallel {
+                stage('Testing backend') {
+                    steps {
+                        sh '''
+                          echo "Testing mvn in $BRANCH"
+                          echo "mvn clean test -P $BRANCH"
+                        '''
+                    }
+                }
+                stage('Testing frontend') {
+                    steps {
+                        sh '''
+                          echo "Testing backend in $BRANCH"
+                          echo "npm check install"
+                        '''
+                    }
+                }
+            }
+        }
+        stage('Deploy') {
+            when {
+                branch 'main'
+            }
+            steps {
+                echo "Deploy in artifactory"
+            }
+            post {
+                cleanup { cleanWs() }
             }
         }
     }
