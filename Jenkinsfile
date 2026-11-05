@@ -1,9 +1,6 @@
 pipeline{
     agent{
         label "docker-agent"
-        dockerfile {
-            filename 'Dockerfile'
-        }
     }
     options {
         timestamps()
