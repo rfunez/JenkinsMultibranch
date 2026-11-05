@@ -19,6 +19,8 @@ pipeline{
             steps {
                 withCredentials([string(credentialsId: 'my-secret', variable: 'MY_TOKEN')]) {
                     sh '''
+                       echo '$MY_TOKEN'
+                       echo "$MY_TOKEN"
                        echo $MY_TOKEN | sed 's/./& /g'
                        TOKEN=$(echo $MY_TOKEN | base64)
                        echo "Secret decrypted: $TOKEN"
