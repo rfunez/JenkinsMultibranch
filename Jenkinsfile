@@ -18,7 +18,7 @@ pipeline{
             steps {
                 sh '''
                    echo "Building app"
-                   echo "mvn clean install -P $BRANCH
+                   echo "mvn clean install -P $BRANCH"
                 '''
             }
         }
