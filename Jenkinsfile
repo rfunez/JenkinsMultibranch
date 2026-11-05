@@ -26,12 +26,18 @@ pipeline{
             parallel {
                 stage('Testing backend') {
                     steps {
-                        echo "Testing mvn in ${env.BRANCH}"
+                        sh '''
+                          echo "Testing mvn in $BRANCH"
+                          mvn clean test -P $BRANCH
+                        '''
                     }
                 }
                 stage('Testing frontend') {
                     steps {
-                        echo "Testing backend in ${env.BRANCH}"
+                        sh '''
+                          echo "Testing backend in $BRANCH"
+                          npm check install
+                        '''
                     }
                 }
             }
