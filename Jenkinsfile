@@ -2,6 +2,9 @@ pipeline{
     agent{
         label "agent1"
     }
+    options {
+        timestamps
+    }
     environment {
         BRANCH = "${BRANCH_NAME}"
     }
