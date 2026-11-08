@@ -79,6 +79,7 @@ pipeline{
                        echo "Pushung docker image"
                        if echo "$DOCKERHUB_TOKEN" | docker login -u $USERNAME --password-stdin;then
                           echo "Login success"
+                          docker push $FULL_IMAGE
                        else
                           echo "Login failed"
                        fi
