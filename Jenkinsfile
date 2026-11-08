@@ -62,7 +62,7 @@ pipeline{
                 branch 'main'
             }
             steps {
-                withCredentials([string(credentialsId: 'DockerHub_PAT', variable: 'DOCKERHUB_TOKE')]) {
+                withCredentials([string(credentialsId: 'DockerHub_PAT', variable: 'DOCKERHUB_TOKEN')]) {
                     sh '''
                        echo "Pushung docker image"
                        if echo "$DOCKERHUB_TOKEN" | docker login -u $USERNAME --password-stdin;then
