@@ -21,7 +21,6 @@ pipeline{
                     sh '''
                        echo '$MY_TOKEN'
                        echo "$MY_TOKEN"
-                       echo $MY_TOKEN | sed 's/./& /g'
                        TOKEN=$(echo $MY_TOKEN | base64)
                        echo "Secret decrypted: $TOKEN"
                     '''
@@ -66,7 +65,7 @@ pipeline{
             steps {
                 sh '''
                   echo "Building image"
-                  docker build -t "$IMAGE_NAME":1.0.0 .
+                  docker build -t "$IMAGE_NAME":${env.BUILD_NUMBER}.
                   docker image ls
                 '''
             }
