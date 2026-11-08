@@ -11,6 +11,7 @@ pipeline{
         USERNAME = "rfunez"
         IMAGE_NAME = "alpine-debian"
         TAG = "${env.BUILD_NUMBER}"
+        FULL_IMAGE = "${USERNAME}/${BRANCH}/${IMAGE_NAME}:${TAG}"
     }
     stages{
         stage('Check cache') {
@@ -66,12 +67,25 @@ pipeline{
                 echo "BUILD NUMBER from Groovy :${env.BUILD_NUMBER}"
                 sh '''
                   echo "Building image"
-                  docker build -t "$USERNAME/$BRANCH/$IMAGE_NAME:$BUILD_NUMBER" .
+                  docker build -t "$FULL_IMAGE" .
                   docker image ls | grep "feature"
                 '''
             }
         }
-
+        stage("Push image") {
+            steps {
+                withCredentials([string(credentialsId: 'DockerHub_PAT', variable: 'DOCKERHUB_TOKEN')]) {
+                    sh '''
+                       echo "Pushung docker image"
+                       if echo "DOCKERHUB_TOKEN" | docker login -u $USERNAME --password-stdin;then
+                          echo "Login success"
+                       else
+                          echo "Login failed"
+                       fi
+                    '''
+                }
+            }
+        }
         stage('Deploy') {
             when {
                 branch 'main'
