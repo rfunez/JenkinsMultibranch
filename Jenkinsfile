@@ -19,18 +19,6 @@ pipeline{
                 echo "Checking cache usage in ${env.BRANCH}"
             }
         }
-        stage('Check credentials') {
-            steps {
-                withCredentials([string(credentialsId: 'my-secret', variable: 'MY_TOKEN')]) {
-                    sh '''
-                       echo '$MY_TOKEN'
-                       echo "$MY_TOKEN"
-                       TOKEN=$(echo $MY_TOKEN | base64)
-                       echo "Secret decrypted: $TOKEN"
-                    '''
-                }
-            }
-        }
         stage("Build"){
             steps {
                 sh '''
@@ -65,7 +53,7 @@ pipeline{
                 sh '''
                   echo "Building image"
                   docker build -t "$FULL_IMAGE" .
-                  docker image ls | grep "feature"
+                  docker image ls | grep $BRANCH
                 '''
             }
         }
@@ -74,14 +62,15 @@ pipeline{
                 branch 'main'
             }
             steps {
-                withCredentials([string(credentialsId: 'DockerHub_PAT', variable: 'DOCKERHUB_TOKEN')]) {
+                withCredentials([string(credentialsId: 'DockerHub_PAT', variable: 'DOCKERHUB_TOKE')]) {
                     sh '''
                        echo "Pushung docker image"
                        if echo "$DOCKERHUB_TOKEN" | docker login -u $USERNAME --password-stdin;then
                           echo "Login success"
                           docker push $FULL_IMAGE
                        else
-                          echo "Login failed"
+                          echo 'Login failed'
+                          exit 1
                        fi
                     '''
                 }
