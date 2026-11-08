@@ -63,9 +63,10 @@ pipeline{
                 IMAGE_NAME = "alpine-debian"
             }
             steps {
+                echo "BUILD NUMBER from Groovy :${env.BUILD_NUMBER}"
                 sh '''
                   echo "Building image"
-                  docker build -t "$IMAGE_NAME:${env.BUILD_NUMBER}" .
+                  docker build -t "$IMAGE_NAME:$BUILD_NUMBER" .
                   docker image ls
                 '''
             }
