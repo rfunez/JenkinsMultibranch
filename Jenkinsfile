@@ -60,9 +60,6 @@ pipeline{
             }
         }
         stage('Build image') {
-            when {
-                branch 'feature/docker'
-            }
             steps {
                 echo "BUILD NUMBER from Groovy :${env.BUILD_NUMBER}"
                 sh '''
@@ -73,6 +70,9 @@ pipeline{
             }
         }
         stage("Push image") {
+            when {
+                branch 'main'
+            }
             steps {
                 withCredentials([string(credentialsId: 'DockerHub_PAT', variable: 'DOCKERHUB_TOKEN')]) {
                     sh '''
