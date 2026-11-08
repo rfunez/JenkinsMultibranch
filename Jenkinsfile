@@ -7,7 +7,10 @@ pipeline{
         parallelsAlwaysFailFast()
     }
     environment {
-        BRANCH = "${BRANCH_NAME}"
+        BRANCH = "${env.BRANCH_NAME}"
+        USERNAME = "rfunez"
+        IMAGE_NAME = "alpine-debian"
+        TAG = "${env.BUILD_NUMBER}"
     }
     stages{
         stage('Check cache') {
@@ -59,15 +62,12 @@ pipeline{
             when {
                 branch 'feature/docker'
             }
-            environment {
-                IMAGE_NAME = "alpine-debian"
-            }
             steps {
                 echo "BUILD NUMBER from Groovy :${env.BUILD_NUMBER}"
                 sh '''
                   echo "Building image"
-                  docker build -t "$IMAGE_NAME:$BUILD_NUMBER" .
-                  docker image ls
+                  docker build -t "$USERNAME/$BRANCH/$IMAGE_NAME:$BUILD_NUMBER" .
+                  docker image ls | grep "feature"
                 '''
             }
         }
