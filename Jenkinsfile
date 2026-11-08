@@ -7,7 +7,7 @@ pipeline{
         parallelsAlwaysFailFast()
     }
     environment {
-        BRANCH = "${env.BRANCH_NAME}"
+        BRANCH = "${env.BRANCH_NAME.replace('/','-')}"
         USERNAME = "rfunez"
         IMAGE_NAME = "alpine-debian"
         TAG = "${env.BUILD_NUMBER}"
