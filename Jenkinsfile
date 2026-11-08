@@ -10,8 +10,8 @@ pipeline{
         BRANCH = "${env.BRANCH_NAME.replace('/','-')}"
         USERNAME = "rfunez"
         IMAGE_NAME = "alpine-debian"
-        TAG = "${env.BUILD_NUMBER}"
-        FULL_IMAGE = "${USERNAME}/${BRANCH}/${IMAGE_NAME}:${TAG}"
+        TAG = "${BRANCH}-${env.BUILD_NUMBER}"
+        FULL_IMAGE = "${USERNAME}/${IMAGE_NAME}:${TAG}"
     }
     stages{
         stage('Check cache') {
